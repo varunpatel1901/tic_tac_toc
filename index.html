@@ -88,7 +88,7 @@ touch-action: manipulation;
 }
 
 .msg-container {
-    padding-top: 5vmin;
+    padding-top: 12vmin;
     height: 30vmin;
     display: flex;
     flex-direction: column;
@@ -156,7 +156,7 @@ boxes.forEach((box) => {
 
         if (box.innerText !== "") return; // already filled
 
-        // 👤 User move
+        
         box.innerText = "O";
         box.disabled = true;
 
@@ -165,7 +165,7 @@ boxes.forEach((box) => {
         if(!msgContainer.classList.contains("hide"))
         return;
 
-        // 🤖 Computer move
+        
         let emptyBoxes = [];
 
         boxes.forEach((b, i) => {
