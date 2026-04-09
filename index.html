@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Tic Tae Toe</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
@@ -27,20 +27,18 @@ h1 {
 }
 
 .container {
-    height: 70vh; /* fixed space issue */
+    min-height: 70vh;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .game{
-    height: 60vh;
-    width: 60vh;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 1.5vh;
+    width: 90vmin;
+    height: 90vmin;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2vmin;
 }
 
 .box{
@@ -55,11 +53,14 @@ h1 {
     background: #e2e8f0;
     cursor: pointer;
     transition: all 0.2s ease;
-}
 
-.box:hover {
-    background: #cbd5f5;
-    transform: scale(1.05);
+
+touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+.box:active {
+    transform: scale(0.95);
 }
 
 #reset-btn,
