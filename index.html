@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tae Toe</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body{
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    text-align: center;
+    color: #f1f5f9;
+}
+
+h1 {
+    margin-top: 20px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.container {
+    height: 70vh; /* fixed space issue */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.game{
+    height: 60vh;
+    width: 60vh;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5vh;
+}
+
+.box{
+    height: 18vh;
+    width: 18vh;
+    border-radius: 1rem;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    font-size: 7vh;
+    font-weight: bold;
+    color: #0f172a;
+    background: #e2e8f0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.box:hover {
+    background: #cbd5f5;
+    transform: scale(1.05);
+}
+
+#reset-btn,
+#new-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    background: #3b82f6;
+    color: white;
+    margin-top: 2rem;
+    border-radius: 1.5rem;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#reset-btn:hover,
+#new-btn:hover {
+    background: #2563eb;
+}
+
+#msg {
+    color: #22c55e;
+    font-size: 5vmin;
+    font-weight: 600;
+}
+
+.msg-container {
+    height: 30vmin;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.hide {
+    display: none;
+}
+    </style>
+</head>
+<body>
+    <div class="msg-container hide">
+        <p id="msg">Winner</p>
+        <button id="new-btn">NEW GAME</button>
+    </div>
+    <main>
+        <h1>Tic Tac Toe</h1>
+        <div class="container">
+            <div class="game">
+                <button class="box"></button>
+                <button class="box"></button>
+                <button class="box"></button>
+                <button class="box"></button>
+                <button class="box"></button>
+                <button class="box"></button>
+                <button class="box"></button>
+                <button class="box"></button>
+                <button class="box"></button>
+            </div>
+        </div>
+        <button id="reset-btn">RESET GAME</button>
+    </main>
+    <script>
+        let boxes = document.querySelectorAll(".box");
+let resetBtn = document.querySelector("#reset-btn");
+let newGameBtn = document.querySelector("#new-btn");
+let msgContainer = document.querySelector(".msg-container");
+let msg = document.querySelector("#msg");
+
+let turn0 = true; //playerX, player0
+
+
+const winPatterns = [
+    [0,1,2],
+    [0,3,6],
+    [0,4,8],
+    [1,4,7],
+    [2,4,6],
+    [2,5,8],
+    [3,4,5],
+    [6,7,8],
+];
+
+const resetGame = () => {
+    turn0 = true;
+    enableBoxes();
+    msgContainer.classList.add("hide");
+}
+
+boxes.forEach((box) => {
+    box.addEventListener("click", () => {
+
+        if (box.innerText !== "") return; // already filled
+
+        // 👤 User move
+        box.innerText = "O";
+        box.disabled = true;
+
+        checkWinner();
+
+        if(!msgContainer.classList.contains("hide"))
+        return;
+
+        // 🤖 Computer move
+        let emptyBoxes = [];
+
+        boxes.forEach((b, i) => {
+            if (b.innerText === "") {
+                emptyBoxes.push(i); // store empty box index
+            }
+        });
+
+        if (emptyBoxes.length > 0) {
+            let randomIndex = emptyBoxes[Math.floor(Math.random() * emptyBoxes.length)];
+            
+            boxes[randomIndex].innerText = "X"; // computer plays
+            boxes[randomIndex].disabled = true;
+
+            checkWinner();
+        }
+    });
+});
+
+const disableBoxes = () => {
+    for (box of boxes) {
+        box.disabled= true;
+    }
+}
+
+const enableBoxes = () => {
+    for (box of boxes) {
+        box.disabled= false;
+        box.innerText = "";
+    }
+}
+
+const showWinner = (winner) => {
+    if (winner === "O"){
+        msg.innerText = `Congratulations, You Win.\n Winner is "${winner}"`;
+    }
+    else{
+        msg.innerText = `Sorry, You Lose.\n Winner is "${winner}"`;
+    }
+        msgContainer.classList.remove("hide");
+    disableBoxes();
+};
+
+const checkWinner = () => {
+    for (let pattern of winPatterns) {
+        let pos1val = boxes[pattern[0]].innerText;
+        let pos2val = boxes[pattern[1]].innerText;
+        let pos3val = boxes[pattern[2]].innerText;
+
+
+    if(pos1val != "" && pos2val != "" && pos3val != ""){
+        if (pos1val===pos2val && pos2val===pos3val) {
+            showWinner(pos1val);
+            disableBoxes();
+        }
+    }
+}
+}
+
+
+
+newGameBtn.addEventListener("click", resetGame);
+resetBtn.addEventListener("click", resetGame);
+    </script>
+</body>
+</html>
